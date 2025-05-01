@@ -5,7 +5,7 @@ using UnityEngine.UI;
 public class BetTime : MonoBehaviour
 {
     // Assign in inspector to display the text
-    public Text legacyText;
+    public Text timeText;
 
     private DateTime betEndTime;
 
@@ -35,12 +35,12 @@ public class BetTime : MonoBehaviour
             string seconds = Mathf.FloorToInt((float)(timeLeft.Seconds)).ToString("D2");
 
             // Display legacy style time text
-            legacyText.text = $"Bets close in: {minutes}:{seconds} " +
+            timeText.text = $"Bets close in: {minutes}:{seconds} " +
                               $"\n(ends: {betEndTime:hh:mm tt})";
         }
         else
         {
-            legacyText.text = "Betting window closed.";
+            timeText.text = "Betting window closed.";
         }
     }
     
