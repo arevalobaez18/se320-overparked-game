@@ -375,6 +375,7 @@ MonoBehaviour:
   nameText: {fileID: 4171255991456041285}
   thumbnailDisplay: {fileID: 2265106466738525968}
   percentageText: {fileID: 4501192856749958743}
+  progressBar: {fileID: 5395024359646399137}
 --- !u!1 &3720531293195753794
 GameObject:
   m_ObjectHideFlags: 0
@@ -855,7 +856,7 @@ GameObject:
   - component: {fileID: 2884486988249791276}
   - component: {fileID: 5395024359646399137}
   m_Layer: 5
-  m_Name: Progress Bar
+  m_Name: Progress bar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

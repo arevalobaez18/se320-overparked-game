@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityProgressBar;
 
 public class ParkingStructure : MonoBehaviour
 {
@@ -18,7 +19,7 @@ public class ParkingStructure : MonoBehaviour
     public Text nameText;
     public RawImage thumbnailDisplay;
     public Text percentageText;
-
+    public ProgressBar progressBar;
 
     // Start is called before the first frame update
     void Start()
@@ -27,6 +28,7 @@ public class ParkingStructure : MonoBehaviour
         nameText.text = _id;
         thumbnailDisplay.texture = _thumbnail;
         percentageText.text = fillPercentage + "% full";
+        progressBar.Value = fillPercentage / 100f;
     }
 
     // Update is called once per frame
