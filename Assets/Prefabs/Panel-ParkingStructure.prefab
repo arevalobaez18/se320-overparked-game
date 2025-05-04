@@ -371,7 +371,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _id: Structure
   _thumbnail: {fileID: 2800000, guid: 53b01dae335d3bc49b1a61aa4cd9caa9, type: 3}
-  fillPercentage: 0
+  fillPercentage: 41.4
   nameText: {fileID: 4171255991456041285}
   thumbnailDisplay: {fileID: 2265106466738525968}
   percentageText: {fileID: 4501192856749958743}

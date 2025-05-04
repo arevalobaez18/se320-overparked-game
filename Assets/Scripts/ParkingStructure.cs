@@ -27,14 +27,26 @@ public class ParkingStructure : MonoBehaviour
         Debug.Log($"ParkingStructure {_id} started with fill: {fillPercentage}%");
         nameText.text = _id;
         thumbnailDisplay.texture = _thumbnail;
-        percentageText.text = fillPercentage + "% full";
-        progressBar.Value = fillPercentage / 100f;
+        UpdatePercentageText();
+        UpdateProgressBarValue();
     }
 
     // Update is called once per frame
     void Update()
     {
         // You can simulate parking usage changes here, if needed
+        UpdatePercentageText();
+        UpdateProgressBarValue();
+    }
+
+    private void UpdateProgressBarValue()
+    {
+        progressBar.Value = fillPercentage / 100f;
+    }
+
+    void UpdatePercentageText()
+    {
+        percentageText.text = fillPercentage + "% full";
     }
 
     // This will automatically update the UI nameText in the Editor when _id is changed
