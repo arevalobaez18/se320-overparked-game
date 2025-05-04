@@ -337,6 +337,7 @@ MonoBehaviour:
   fillPercentage: 0
   nameText: {fileID: 4171255991456041285}
   thumbnailDisplay: {fileID: 2265106466738525968}
+  percentageText: {fileID: 4501192856749958743}
 --- !u!1 &3720531293195753794
 GameObject:
   m_ObjectHideFlags: 0
