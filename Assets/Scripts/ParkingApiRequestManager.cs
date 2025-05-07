@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,5 +20,9 @@ class JsonParkingResponse
 
 public class ParkingApiRequestManager : MonoBehaviour
 {
-
+    public JsonParkingStructure[] GetParkingStructures()
+    {
+        // TODO
+        return Array.Empty<JsonParkingStructure>();
+    }
 }
