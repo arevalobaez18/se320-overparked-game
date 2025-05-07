@@ -5,26 +5,54 @@ using UnityEngine;
 using UnityEngine.Networking;
 
 [System.Serializable]
-partial class JsonParkingStructure
+public class JsonResponseParkingStructure
 {
     public string address;
     public int capacity;
     public int currentCount;
-    public new string name;
+    public string name;
 }
 
 [System.Serializable]
 class JsonParkingResponse
 {
-    public JsonParkingStructure[] parkingStructures;
+    public JsonResponseParkingStructure[] parkingStructures;
+}
+
+public interface IParkingRequestObserver
+{
+    public void OnDataUpdate();
 }
 
 public class ParkingApiRequestManager : MonoBehaviour
 {
-    public JsonParkingStructure[] GetParkingStructures()
+    private List<IParkingRequestObserver> _observers = new List<IParkingRequestObserver>();
+
+    public void AddObserver(IParkingRequestObserver observer)
+    {
+        _observers.Add(observer);
+    }
+
+    public void RemoveObserver(IParkingRequestObserver observer)
+    {
+        var indexToRemove = -1;
+
+        for (int i = 0; i < _observers.Count; ++i)
+        {
+            if (_observers[i].Equals(observer))
+            {
+                indexToRemove = i;
+                break;
+            }
+        }
+
+        _observers.RemoveAt(indexToRemove);
+    }
+
+    public JsonResponseParkingStructure[] GetParkingStructures()
     {
         // TODO
-        return Array.Empty<JsonParkingStructure>();
+        return Array.Empty<JsonResponseParkingStructure>();
     }
 
     private void Start()

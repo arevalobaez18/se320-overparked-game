@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityProgressBar;
 
-public partial class JsonParkingStructure : MonoBehaviour
+public class JsonParkingStructure : MonoBehaviour
 {
     [Header("Data")]
     [SerializeField]
