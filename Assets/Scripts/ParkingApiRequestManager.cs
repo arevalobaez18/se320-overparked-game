@@ -49,6 +49,13 @@ public class ParkingApiRequestManager : MonoBehaviour
         _observers.RemoveAt(indexToRemove);
     }
 
+
+    [ContextMenu("Test GET request")]
+    public void TestGetRequest()
+    {
+        Start();
+    }
+
     public JsonResponseParkingStructure[] GetParkingStructures()
     {
         // TODO
@@ -57,7 +64,7 @@ public class ParkingApiRequestManager : MonoBehaviour
 
     private void Start()
     {
-        StartCoroutine(GetRequest("https://webfarm.chapman.edu/parkinginfo/"));
+        StartCoroutine(GetRequest("https://webfarm.chapman.edu/ParkingService/ParkingService/counts"));
     }
 
     IEnumerator GetRequest(string uri)
