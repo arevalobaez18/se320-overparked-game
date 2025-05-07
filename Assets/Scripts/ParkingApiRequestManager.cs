@@ -7,16 +7,16 @@ using UnityEngine.Networking;
 [System.Serializable]
 public class JsonResponseParkingStructure
 {
-    public string address;
-    public int capacity;
-    public int currentCount;
-    public string name;
+    public string Address;
+    public int Capacity;
+    public int CurrentCount;
+    public string Name;
 }
 
 [System.Serializable]
 class JsonParkingResponse
 {
-    public JsonResponseParkingStructure[] parkingStructures;
+    public JsonResponseParkingStructure[] Structures;
 }
 
 public interface IParkingRequestObserver
@@ -27,6 +27,7 @@ public interface IParkingRequestObserver
 public class ParkingApiRequestManager : MonoBehaviour
 {
     private List<IParkingRequestObserver> _observers = new List<IParkingRequestObserver>();
+    public JsonResponseParkingStructure[] ParkingStructures { get; private set; } = Array.Empty<JsonResponseParkingStructure>();
 
     public void AddObserver(IParkingRequestObserver observer)
     {
@@ -56,12 +57,6 @@ public class ParkingApiRequestManager : MonoBehaviour
         Start();
     }
 
-    public JsonResponseParkingStructure[] GetParkingStructures()
-    {
-        // TODO
-        return Array.Empty<JsonResponseParkingStructure>();
-    }
-
     private void Start()
     {
         StartCoroutine(GetRequest("https://webfarm.chapman.edu/ParkingService/ParkingService/counts"));
@@ -80,9 +75,26 @@ public class ParkingApiRequestManager : MonoBehaviour
                     Debug.LogError("Error: " + webRequest.error);
                     break;
                 case UnityWebRequest.Result.Success:
-                    Debug.Log("Response: " + webRequest.downloadHandler.text);
+                    var response = webRequest.downloadHandler.text;
+                    ParseSuccessfulJsonResponse(response);
                     break;
             }
+        }
+    }
+
+    private void ParseSuccessfulJsonResponse(string response)
+    {
+        JsonParkingResponse parkingResponse = JsonUtility.FromJson<JsonParkingResponse>(response);
+        ParkingStructures = parkingResponse.Structures;
+        Debug.Log(ParkingStructures.Length + " parking structures stored from API");
+        CallObservers();
+    }
+
+    private void CallObservers()
+    {
+        foreach (var observer in _observers)
+        {
+            observer.OnDataUpdate();
         }
     }
 }
