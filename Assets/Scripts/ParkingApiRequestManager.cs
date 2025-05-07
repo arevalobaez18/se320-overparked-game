@@ -82,6 +82,11 @@ public class ParkingApiRequestManager : MonoBehaviour
         }
     }
 
+    public static object GetRequest(string url, Action<string> onSuccess)
+    {
+        throw new NotImplementedException();
+    }
+
     private void ParseSuccessfulJsonResponse(string response)
     {
         JsonParkingResponse parkingResponse = JsonUtility.FromJson<JsonParkingResponse>(response);
