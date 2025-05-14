@@ -121,12 +121,13 @@ public class ParkingApiRequestManager : MonoBehaviour
     {
         JsonParkingResponse parkingResponse = JsonUtility.FromJson<JsonParkingResponse>(response);
         ParkingStructures = parkingResponse.Structures;
-        Debug.Log(ParkingStructures.Length + " parking structures stored from API");
+        // Debug.Log(ParkingStructures.Length + " parking structures stored from API");
         CallObservers();
     }
 
     private void CallObservers()
     {
+        // e.g. attach an observer to update the UI
         foreach (var observer in _observers)
         {
             observer.OnDataUpdate();
