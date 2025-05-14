@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -26,8 +27,15 @@ public interface IParkingRequestObserver
 
 public class ParkingApiRequestManager : MonoBehaviour
 {
+    private const String URL = "https://webfarm.chapman.edu/ParkingService/ParkingService/counts";
+    private const float SecondsToWaitBetweenRequests = 5;
+
     private List<IParkingRequestObserver> _observers = new List<IParkingRequestObserver>();
     public JsonResponseParkingStructure[] ParkingStructures { get; private set; } = Array.Empty<JsonResponseParkingStructure>();
+
+    public bool updateLoopIsRunning = true;
+
+    [CanBeNull] private IEnumerator routine;
 
     public void AddObserver(IParkingRequestObserver observer)
     {
@@ -51,15 +59,35 @@ public class ParkingApiRequestManager : MonoBehaviour
     }
 
 
-    [ContextMenu("Test GET request")]
-    public void TestGetRequest()
+    [ContextMenu("Test start getting updates")]
+    public void TestStartGettingUpdates()
     {
-        Start();
+        StartGettingUpdates();
     }
 
-    private void Start()
+    [ContextMenu("Test stop getting updates")]
+    public void TestStopGettingUpdates()
     {
-        StartCoroutine(GetRequest("https://webfarm.chapman.edu/ParkingService/ParkingService/counts"));
+        StopGettingUpdates();
+    }
+
+    public void StartGettingUpdates()
+    {
+        routine = GetRequest(URL);
+        StartCoroutine(routine);
+
+        updateLoopIsRunning = true;
+    }
+
+    public void StopGettingUpdates()
+    {
+        if (routine != null)
+        {
+            StopCoroutine(routine);
+            routine = null;
+        }
+
+        updateLoopIsRunning = false;
     }
 
     IEnumerator GetRequest(string uri)
@@ -79,6 +107,13 @@ public class ParkingApiRequestManager : MonoBehaviour
                     ParseSuccessfulJsonResponse(response);
                     break;
             }
+
+            if (!updateLoopIsRunning) yield break;
+
+            // Note: WaitForSeconds only works when the game is running
+            yield return new WaitForSeconds(SecondsToWaitBetweenRequests);
+            routine = GetRequest(URL);
+            StartCoroutine(routine);
         }
     }
 
