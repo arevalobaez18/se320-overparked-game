@@ -60,12 +60,14 @@ public class ParkingApiRequestTests
             {
                 errorCalled = true;
                 errorText = error;
-            });
+            }
+        );
         
         //Assert
         Assert.IsFalse(successCalled, "Success callback should not be invoked.");
         Assert.IsTrue(errorCalled, "Error callback should be invoked.");
         Assert.IsNotEmpty(errorText, "Error message should not be empty.");
-
+        
+        yield return null;
     }
 }
