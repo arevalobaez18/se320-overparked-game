@@ -27,6 +27,8 @@ public interface IParkingRequestObserver
 
 public class ParkingApiRequestManager : MonoBehaviour
 {
+    public static ParkingApiRequestManager Instance { get; private set; }
+
     private const String URL = "https://webfarm.chapman.edu/ParkingService/ParkingService/counts";
     private const float SecondsToWaitBetweenRequests = 5;
 
@@ -36,6 +38,22 @@ public class ParkingApiRequestManager : MonoBehaviour
     public bool updateLoopIsRunning = true;
 
     [CanBeNull] private IEnumerator routine;
+
+    // Instantiating a singleton in Unity is different than regular C#
+    // See https://gamedevbeginner.com/singletons-in-unity-the-right-way/
+    private void Awake()
+    {
+        // If there is an instance, and it's not me, delete myself.
+
+        if (Instance != null && Instance != this)
+        {
+            Destroy(this);
+        }
+        else
+        {
+            Instance = this;
+        }
+    }
 
     public void AddObserver(IParkingRequestObserver observer)
     {
