@@ -1919,7 +1919,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5a1e4c08c1bc4dfaa829c835ae7615a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  updateLoopIsRunning: 1
+  updateLoopIsRunning: 0
 --- !u!4 &1285355373
 Transform:
   m_ObjectHideFlags: 0
