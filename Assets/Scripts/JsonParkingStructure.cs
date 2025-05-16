@@ -5,8 +5,6 @@ using UnityProgressBar;
 
 public class JsonParkingStructure : MonoBehaviour, IParkingRequestObserver
 {
-    private ParkingApiRequestManager _apiManager = ParkingApiRequestManager.Instance;
-
     [Header("Data")]
     [SerializeField]
     private string _id = "Parking Structure";
@@ -32,18 +30,18 @@ public class JsonParkingStructure : MonoBehaviour, IParkingRequestObserver
         UpdatePercentageText();
         UpdateProgressBarValue();
 
-        if (_apiManager != null)
+        if (ParkingApiRequestManager.Instance != null)
         {
-            _apiManager.AddObserver(this);
+            ParkingApiRequestManager.Instance.AddObserver(this);
             UpdateFromAPI();
         }
     }
 
     void OnDestroy()
     {
-        if (_apiManager != null)
+        if (ParkingApiRequestManager.Instance != null)
         {
-            _apiManager.RemoveObserver(this);
+            ParkingApiRequestManager.Instance.RemoveObserver(this);
         }
     }
 
@@ -54,9 +52,9 @@ public class JsonParkingStructure : MonoBehaviour, IParkingRequestObserver
 
     private void UpdateFromAPI()
     {
-        if (_apiManager != null)
+        if (ParkingApiRequestManager.Instance != null)
         {
-            float apiPercentage = _apiManager.GetAPIPercentage(_id);
+            float apiPercentage = ParkingApiRequestManager.Instance.GetAPIPercentage(_id);
             Debug.Log($"API Percentage for '{_id}': {apiPercentage}");
             if (apiPercentage >= 0)
             {
