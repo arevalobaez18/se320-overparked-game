@@ -1919,6 +1919,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5a1e4c08c1bc4dfaa829c835ae7615a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  updateLoopIsRunning: 1
 --- !u!4 &1285355373
 Transform:
   m_ObjectHideFlags: 0
@@ -2135,6 +2136,16 @@ PrefabInstance:
       propertyPath: _thumbnail
       value: 
       objectReference: {fileID: 2800000, guid: cc20d0797f997e948bb04432f643ae13, type: 3}
+    - target: {fileID: 905689831337383770, guid: ca6f69a18a50b4cadb8f501456909ec9,
+        type: 3}
+      propertyPath: apiManager
+      value: 
+      objectReference: {fileID: 1285355372}
+    - target: {fileID: 905689831337383770, guid: ca6f69a18a50b4cadb8f501456909ec9,
+        type: 3}
+      propertyPath: fillPercentage
+      value: 50
+      objectReference: {fileID: 0}
     - target: {fileID: 1980976342273836119, guid: ca6f69a18a50b4cadb8f501456909ec9,
         type: 3}
       propertyPath: m_Pivot.x
@@ -3143,7 +3154,17 @@ PrefabInstance:
     - target: {fileID: 905689831337383770, guid: ca6f69a18a50b4cadb8f501456909ec9,
         type: 3}
       propertyPath: _id
-      value: Anderson
+      value: Anderson Structure
+      objectReference: {fileID: 0}
+    - target: {fileID: 905689831337383770, guid: ca6f69a18a50b4cadb8f501456909ec9,
+        type: 3}
+      propertyPath: apiManager
+      value: 
+      objectReference: {fileID: 1285355372}
+    - target: {fileID: 905689831337383770, guid: ca6f69a18a50b4cadb8f501456909ec9,
+        type: 3}
+      propertyPath: fillPercentage
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 1980976342273836119, guid: ca6f69a18a50b4cadb8f501456909ec9,
         type: 3}

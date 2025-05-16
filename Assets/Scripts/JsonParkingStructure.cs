@@ -3,8 +3,11 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityProgressBar;
 
-public class JsonParkingStructure : MonoBehaviour
+public class JsonParkingStructure : MonoBehaviour, IParkingRequestObserver
 {
+    [Header("API Reference")]
+    public ParkingApiRequestManager apiManager;
+
     [Header("Data")]
     [SerializeField]
     private string _id = "Parking Structure";
@@ -29,6 +32,38 @@ public class JsonParkingStructure : MonoBehaviour
         thumbnailDisplay.texture = _thumbnail;
         UpdatePercentageText();
         UpdateProgressBarValue();
+
+        if (apiManager != null)
+        {
+            apiManager.AddObserver(this);
+            UpdateFromAPI();
+        }
+    }
+
+    void OnDestroy()
+    {
+        if (apiManager != null)
+        {
+            apiManager.RemoveObserver(this);
+        }
+    }
+
+    public void OnDataUpdate()
+    {
+        UpdateFromAPI();
+    }
+
+    private void UpdateFromAPI()
+    {
+        if (apiManager != null)
+        {
+            float apiPercentage = apiManager.GetAPIPercentage(_id);
+            Debug.Log($"API Percentage for '{_id}': {apiPercentage}");
+            if (apiPercentage >= 0)
+            {
+                fillPercentage = 100f - apiPercentage;
+            }
+        }
     }
 
     // Update is called once per frame
@@ -37,6 +72,12 @@ public class JsonParkingStructure : MonoBehaviour
         // You can simulate parking usage changes here, if needed
         UpdatePercentageText();
         UpdateProgressBarValue();
+
+        // Debug key: Press 'P' to log the current fill percentage
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            Debug.Log($"[{_id}] Fill Percentage: {fillPercentage}%");
+        }
     }
 
     private void UpdateProgressBarValue()

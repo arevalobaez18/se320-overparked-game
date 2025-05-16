@@ -90,6 +90,24 @@ public class ParkingApiRequestManager : MonoBehaviour
         updateLoopIsRunning = false;
     }
 
+    /// Returns the percentage of available spots for a parking structure by name.
+    /// Returns -1 if the structure is not found or has zero capacity.
+    public float GetAPIPercentage(string structureName)
+    {
+        foreach (var structure in ParkingStructures)
+        {
+            if (structure.Name.Equals(structureName, StringComparison.OrdinalIgnoreCase))
+            {
+                if (structure.Capacity == 0) return -1f;
+                float available = structure.Capacity - structure.CurrentCount;
+                return (available / structure.Capacity) * 100f;
+            }
+        }
+        Debug.LogWarning($"Structure '{structureName}' not found. Available names: " +
+            string.Join(", ", System.Array.ConvertAll(ParkingStructures, s => s.Name)));
+        return -1f;
+    }
+
     IEnumerator GetRequest(string uri)
     {
         using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
@@ -119,9 +137,10 @@ public class ParkingApiRequestManager : MonoBehaviour
 
     private void ParseSuccessfulJsonResponse(string response)
     {
+        Debug.Log("Raw API JSON: " + response);
         JsonParkingResponse parkingResponse = JsonUtility.FromJson<JsonParkingResponse>(response);
         ParkingStructures = parkingResponse.Structures;
-        // Debug.Log(ParkingStructures.Length + " parking structures stored from API");
+        Debug.Log(ParkingStructures.Length + " parking structures stored from API");
         CallObservers();
     }
 
