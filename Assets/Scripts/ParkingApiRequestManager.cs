@@ -100,7 +100,7 @@ public class ParkingApiRequestManager : MonoBehaviour
             {
                 if (structure.Capacity == 0) return -1f;
                 float available = structure.Capacity - structure.CurrentCount;
-                return (available / structure.Capacity) * 100f;
+                return 100f - ((available / structure.Capacity) * 100f);
             }
         }
         Debug.LogWarning($"Structure '{structureName}' not found. Available names: " +
