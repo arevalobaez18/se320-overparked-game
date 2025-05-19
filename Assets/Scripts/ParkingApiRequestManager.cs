@@ -37,6 +37,12 @@ public class ParkingApiRequestManager : MonoBehaviour
 
     [CanBeNull] private IEnumerator routine;
 
+    [System.Diagnostics.Conditional("UNITY_EDITOR")]
+    public void SetParkingStructuresForTest(JsonResponseParkingStructure[] structures)
+    {
+        ParkingStructures = structures;
+    }
+
     public void AddObserver(IParkingRequestObserver observer)
     {
         _observers.Add(observer);

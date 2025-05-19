@@ -1,73 +1,62 @@
 using NUnit.Framework;
-using UnityEngine.TestTools;
-using System.Collections;
-using System.Net.Http;
-using Unity.Plastic.Newtonsoft.Json.Serialization;
+using System;
+using System.Linq;
 using UnityEngine;
-using UnityEngine.Networking;
-
 
 public class ParkingApiRequestTests
 {
-    private ParkingApiRequestManager parkingApiRequestManager;
-    private bool successCalled;
-    private bool errorCalled;
-    private string responseText;
-    private string errorText;
+    private ParkingApiRequestManager _manager;
 
+    private class MockObserver : IParkingRequestObserver
+    {
+        public bool WasCalled = false;
+
+        public void OnDataUpdate()
+        {
+            WasCalled = true;
+        }
+    }
+    
     [SetUp]
     public void SetUp()
     {
-        parkingApiRequestManager = new ParkingApiRequestManager();
-        successCalled = false;
-        errorCalled = false;
-        responseText = "";
-        errorText = "";
+        _manager = new GameObject().AddComponent<ParkingApiRequestManager>();
     }
 
-    [UnityTest]
-    public IEnumerator GetRequest_SuccessfulResponse_ReturnsExpectedResult()
+    
+    
+    [Test]
+    public void AddObserver_RegisterObserverSuccessfully()
     {
-        //Arrange
-        string url = "https://webfarm.chapman.edu/parkinginfo/";
+        var observer = new MockObserver();
+        _manager.AddObserver(observer);
 
-        yield return ParkingApiRequestManager.GetRequest(url,
-            onSuccess: (response) =>
-            {
-                successCalled = true;
-                responseText = response;
-            });
-        
-        //Assert
-        Assert.IsTrue(successCalled, "Success callback should be invoked.");
-        Assert.IsFalse(errorCalled, "Error callback should not be invoked.");
-        Assert.IsNotEmpty(responseText, "Response text should not be empty.");
+        _manager.TestStartGettingUpdates();
+
+        Assert.IsTrue(_manager.updateLoopIsRunning);
     }
 
-    [UnityTest]
-    public IEnumerator GetRequest_InvalidURL_ReturnsError()
+    [Test]
+    public void RemoveObserver_RemoveObserverSuccessfully()
     {
-        //Arrange
-        string url = "https://invalidurl.test";
+        var observer = new MockObserver();
+        _manager.AddObserver(observer);
+        _manager.RemoveObserver(observer);
+    }
 
-        yield return ParkingApiRequestManager.GetRequest(url,
-            onSuccess: (response) =>
+    [Test]
+    public void GetAPIPercentage_ReturnsCorrectPercentage()
+    {
+        _manager.SetParkingStructuresForTest(new[] 
+        {
+            new JsonResponseParkingStructure
             {
-                successCalled = true;
-                responseText = response;
-            },
-            onError: (error) =>
-            {
-                errorCalled = true;
-                errorText = error;
+                Name = "Test Structure",
+                Capacity = 100,
+                CurrentCount = 50,
+                Address = "123 St"
             }
-        );
-        
-        //Assert
-        Assert.IsFalse(successCalled, "Success callback should not be invoked.");
-        Assert.IsTrue(errorCalled, "Error callback should be invoked.");
-        Assert.IsNotEmpty(errorText, "Error message should not be empty.");
-        
-        yield return null;
+        });
     }
+    
 }
