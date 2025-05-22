@@ -52,8 +52,16 @@ public class GameManager : MonoBehaviour
         Debug.Log("Quit Game");
         Application.Quit();
 
-        #if UNITY_EDITOR
-                UnityEditor.EditorApplication.isPlaying = false;
-        #endif
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#endif
+    }
+    
+    // Place this in a suitable manager class, or use as needed
+    public static void LogBet(GameObject loggedBetPrefab, Transform contentParent, int amount, bool isHigher, string structureName)
+    {
+        var betObj = GameObject.Instantiate(loggedBetPrefab, contentParent);
+        var loggedBet = betObj.GetComponent<LoggedBet>();
+        loggedBet.SetBetInfo(amount, isHigher, structureName);
     }
 }

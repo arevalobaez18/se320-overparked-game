@@ -15,6 +15,22 @@ public class CurrencyManager : MonoBehaviour, IParkingRequestObserver
     private float updateInterval = 1f;
     private float lastUpdateTime;
 
+    public GameObject loggedBetPrefab;
+    public Transform betLogContentParent;
+
+    public void LogBet(int amount, bool isHigher, string structureName)
+    {
+        if (loggedBetPrefab == null || betLogContentParent == null)
+        {
+            Debug.LogWarning("LoggedBet prefab or content parent not assigned!");
+            return;
+        }
+        var betObj = Instantiate(loggedBetPrefab, betLogContentParent);
+        var loggedBet = betObj.GetComponent<LoggedBet>();
+        if (loggedBet != null)
+            loggedBet.SetBetInfo(amount, isHigher, structureName);
+    }
+
     private void Awake()
     {
         if (Instance == null)
@@ -105,12 +121,11 @@ public class CurrencyManager : MonoBehaviour, IParkingRequestObserver
         StartCoroutine(ParkPrediction());  // Start the bet prediction logic
     }
 
-    public void GuessHigher()
+    public void GuessHigher(string structureName)
     {
         SubtractCurrency(currentBetAmount);
+        LogBet(currentBetAmount, true, structureName);
         StartCoroutine(HigherPrediction());
-        
-        
     }
     private IEnumerator HigherPrediction()
     {
@@ -130,12 +145,11 @@ public class CurrencyManager : MonoBehaviour, IParkingRequestObserver
     }
 
 
-    public void GuessLower()
+    public void GuessLower(string structureName)
     {
         SubtractCurrency(currentBetAmount);
+        LogBet(currentBetAmount, false, structureName);
         StartCoroutine(LowerPrediction());
-
-
     }
     private IEnumerator LowerPrediction()
     {
