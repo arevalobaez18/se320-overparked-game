@@ -31,27 +31,19 @@ public class GameManager : MonoBehaviour
 
         if (quitButton != null)
             quitButton.onClick.AddListener(QuitGame);
-
-        StartGettingApiUpdates();
-    }
-
-    private void StartGettingApiUpdates()
-    {
-        ParkingApiRequestManager.Instance.StartGettingUpdates();
-        Debug.Log("Started getting API updates");
     }
 
     public void StartGame()
     {
         Debug.Log("Started the game");
     }
-
+    
     // Quit the game
     public void QuitGame()
     {
         Debug.Log("Quit Game");
         Application.Quit();
-
+        
         #if UNITY_EDITOR
                 UnityEditor.EditorApplication.isPlaying = false;
         #endif
