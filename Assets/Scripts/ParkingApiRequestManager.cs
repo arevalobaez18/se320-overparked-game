@@ -28,7 +28,7 @@ public interface IParkingRequestObserver
 public class ParkingApiRequestManager : MonoBehaviour
 {
     public static ParkingApiRequestManager Instance { get; private set; }
-
+    private int previousTotalCapacity = 0; // To store previous total parking capacity
     private const String URL = "https://webfarm.chapman.edu/ParkingService/ParkingService/counts";
     private const float SecondsToWaitBetweenRequests = 5;
 
@@ -170,15 +170,41 @@ public class ParkingApiRequestManager : MonoBehaviour
         JsonParkingResponse parkingResponse = JsonUtility.FromJson<JsonParkingResponse>(response);
         ParkingStructures = parkingResponse.Structures;
         Debug.Log(ParkingStructures.Length + " parking structures stored from API");
-        CallObservers();
+        
+        // Compare current total capacity with previous one
+        int currentTotalCapacity = GetTotalParkingCapacity();
+        int capacityDifference = currentTotalCapacity - previousTotalCapacity;
+
+        // Notify observers about the data update and the change in capacity
+        CallObservers(capacityDifference);
+
+        // Update previous capacity for the next comparison
+        previousTotalCapacity = currentTotalCapacity;
     }
 
-    private void CallObservers()
+    private void CallObservers(int capacityDifference)
     {
         // e.g. attach an observer to update the UI
         foreach (var observer in _observers)
         {
             observer.OnDataUpdate();
+
+            // Optionally, you could pass the capacity difference to the observer, e.g.:
+            if (observer is CurrencyManager currencyManager)
+            {
+                currencyManager.OnParkingCapacityChanged(capacityDifference);  // This is a new method you can create in CurrencyManager
+            }
         }
+    }
+    
+    public int GetTotalParkingCapacity()
+    {
+        int total = 0;
+        foreach (var structure in ParkingStructures)
+        {
+            total += structure.Capacity;
+        }
+        print("total:" + total);
+        return total;
     }
 }
