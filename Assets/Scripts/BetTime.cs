@@ -20,12 +20,12 @@ public class BetTime : MonoBehaviour
 
     void Update()
     {
-        #if UNITY_EDITOR
+        //#if UNITY_EDITOR
         if (Input.GetKeyDown(KeyCode.F3))
         {
             SkipTime(30f);  // Skip 30 seconds on the timer after pressing F3 (Editor-Exclusive)
         }
-        #endif
+        //#endif
         
         TimeSpan timeLeft = betEndTime - DateTime.Now;
 

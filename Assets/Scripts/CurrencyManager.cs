@@ -47,10 +47,10 @@ public class CurrencyManager : MonoBehaviour, IParkingRequestObserver
             lastUpdateTime = Time.time;
         }
 
-        if (Input.GetKeyDown(KeyCode.F))
+        if (Input.GetKeyDown(KeyCode.F2))
         {
             Add10();
-            Debug.Log("[CurrencyManager] F pressed ¨C gave +10 currency");
+            Debug.Log("[CurrencyManager] F2 pressed and gave +10 currency");
         }
     }
 
@@ -181,7 +181,7 @@ public class CurrencyManager : MonoBehaviour, IParkingRequestObserver
     {
         if (currencyText != null)
         {
-            currencyText.text = "Currency: " + currency.ToString();
+            currencyText.text = currency.ToString();
         }
     }
 
