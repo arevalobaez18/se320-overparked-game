@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
     public Button playButton;
     public Button quitButton;
 
+
     void Awake()
     {
         // Singleton setup

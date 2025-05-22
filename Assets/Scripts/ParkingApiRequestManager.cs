@@ -100,6 +100,7 @@ public class ParkingApiRequestManager : MonoBehaviour
         previousTotalCapacity = currentTotalCapacity;
     }
 
+
     private void CallObservers(int capacityDifference)
     {
         foreach (var observer in _observers)

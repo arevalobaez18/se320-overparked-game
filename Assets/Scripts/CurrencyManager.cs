@@ -9,8 +9,8 @@ public class CurrencyManager : MonoBehaviour, IParkingRequestObserver
     public int currency;
     public Text currencyText;
 
-    private int currentBetAmount = 10;  // Default bet amount
-    private int previousCapacityDifference = 0;  // Store the previous capacity change for betting logic
+    private int currentBetAmount = 10; 
+    private int previousCapacityDifference = 0;  
 
     private float updateInterval = 1f;
     private float lastUpdateTime;
@@ -50,7 +50,6 @@ public class CurrencyManager : MonoBehaviour, IParkingRequestObserver
         if (Input.GetKeyDown(KeyCode.F))
         {
             Add10();
-            Debug.Log("[CurrencyManager] F pressed ¨C gave +10 currency");
         }
     }
 
@@ -58,10 +57,7 @@ public class CurrencyManager : MonoBehaviour, IParkingRequestObserver
     public void OnParkingCapacityChanged(int capacityDifference)
     {
         previousCapacityDifference = capacityDifference;
-        Debug.Log($"Parking capacity changed by: {capacityDifference}");
 
-        // You can use this value to check if the bet was correct
-        // Add your betting logic here (e.g., check if guessed correctly)
     }
 
     public void AddCurrency(int amount)
@@ -84,7 +80,6 @@ public class CurrencyManager : MonoBehaviour, IParkingRequestObserver
         else
         {
             Debug.LogWarning("Not enough currency!");
-            // Automatically add 10 currency if the balance reaches 0
             currency = 0;
             Debug.Log("[CurrencyManager] Money is zero, adding 10 currency.");
             Invoke("Add10", 1f); 
@@ -102,7 +97,7 @@ public class CurrencyManager : MonoBehaviour, IParkingRequestObserver
     public void OnOptionButtonClicked() 
     {
         SubtractCurrency(currentBetAmount);  // Deduct 10 currency for the bet
-        StartCoroutine(ParkPrediction());  // Start the bet prediction logic
+        StartCoroutine(ParkPrediction());  
     }
 
     public void GuessHigher()

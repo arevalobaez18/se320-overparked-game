@@ -14,6 +14,7 @@ public class JsonParkingStructure : MonoBehaviour
     [Range(0f, 100f)]
     public float fillPercentage; // How full the structure is (0 to 100)
 
+
     // Serialize these
     [Header("UI Reference")]
     public Text nameText;
