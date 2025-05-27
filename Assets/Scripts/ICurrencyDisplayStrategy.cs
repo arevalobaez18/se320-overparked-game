@@ -1,7 +1,4 @@
-namespace DefaultNamespace
+public interface ICurrencyDisplayStrategy
 {
-    public interface ICurrencyDisplayStrategy
-    {
-        string Display(int currencyAmount);
-    }
+    string Display(int currencyAmount);
 }
