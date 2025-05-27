@@ -8,6 +8,9 @@ public class CurrencyManager : MonoBehaviour, IParkingRequestObserver
 
     public int currency;
     public Text currencyText;
+    public Text countdownText;
+    public GameObject resultPanel;
+    public Text resultText;
 
     private int currentBetAmount = 10;  // Default bet amount
     private int previousCapacityDifference = 0;  // Store the previous capacity change for betting logic
@@ -17,6 +20,8 @@ public class CurrencyManager : MonoBehaviour, IParkingRequestObserver
 
     public GameObject loggedBetPrefab;
     public Transform betLogContentParent;
+
+    private float countdownTime = 300f;  // 5-minute countdown
 
     public ICurrencyDisplayStrategy currencyDisplayStrategy = new DollarSignCurrencyDisplayStrategy();
 
@@ -65,6 +70,16 @@ public class CurrencyManager : MonoBehaviour, IParkingRequestObserver
             lastUpdateTime = Time.time;
         }
 
+        if (countdownTime > 0)
+        {
+            countdownTime -= Time.deltaTime; // Decrease countdown time each frame
+            UpdateCountdownUI();  // Update the countdown UI
+        }
+        else
+        {
+            EndGame();  // End the game when countdown reaches zero
+        }
+
         if (Input.GetKeyDown(KeyCode.F2))
         {
             Add10();
@@ -72,14 +87,23 @@ public class CurrencyManager : MonoBehaviour, IParkingRequestObserver
         }
     }
 
-    // New method to handle parking capacity changes
-    public void OnParkingCapacityChanged(int capacityDifference)
+    void UpdateCountdownUI()
     {
-        previousCapacityDifference = capacityDifference;
-        Debug.Log($"Parking capacity changed by: {capacityDifference}");
+        int minutes = Mathf.FloorToInt(countdownTime / 60);  // Get minutes
+        int seconds = Mathf.FloorToInt(countdownTime % 60);  // Get seconds
+        countdownText.text = string.Format("{0:00}:{1:00}", minutes, seconds);  // Format the countdown display
+    }
 
-        // You can use this value to check if the bet was correct
-        // Add your betting logic here (e.g., check if guessed correctly)
+    public void EndGame()
+    {
+        ShowResultPanel();  // Show the result panel when time is up
+    }
+
+    public void ShowResultPanel()
+    {
+        resultPanel.SetActive(true);  // Activate the result panel
+        string resultMessage = (currency >= 100) ? $"You won {currency - 100} currency!" : "You lost the bet!";
+        resultText.text = resultMessage;  // Display the result message
     }
 
     public void AddCurrency(int amount)
@@ -102,25 +126,28 @@ public class CurrencyManager : MonoBehaviour, IParkingRequestObserver
         else
         {
             Debug.LogWarning("Not enough currency!");
-            // Automatically add 10 currency if the balance reaches 0
             currency = 0;
-            Debug.Log("[CurrencyManager] Money is zero, adding 10 currency.");
-            Invoke("Add10", 1f);
-
-
+            Debug.Log("[CurrencyManager] Currency is zero, adding 10 currency.");
+            Invoke("Add10", 1f);  // Automatically add 10 currency if balance reaches zero
         }
-
     }
+
     public void Add10()
     {
         AddCurrency(10);
         print("add10");
 
     }
+
     public void OnOptionButtonClicked()
     {
         SubtractCurrency(currentBetAmount);  // Deduct 10 currency for the bet
         StartCoroutine(ParkPrediction());  // Start the bet prediction logic
+    }
+    public void OnParkingCapacityChanged(int capacityDifference)
+    {
+        previousCapacityDifference = capacityDifference;
+        Debug.Log($"Parking capacity changed by: {capacityDifference}");
     }
 
     public void GuessHigher(string structureName)
