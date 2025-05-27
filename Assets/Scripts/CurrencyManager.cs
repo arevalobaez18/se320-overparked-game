@@ -18,6 +18,8 @@ public class CurrencyManager : MonoBehaviour, IParkingRequestObserver
     public GameObject loggedBetPrefab;
     public Transform betLogContentParent;
 
+    public ICurrencyDisplayStrategy currencyDisplayStrategy = new DollarSignCurrencyDisplayStrategy();
+
     public void LogBet(int amount, bool isHigher, string structureName)
     {
         if (loggedBetPrefab == null || betLogContentParent == null)
@@ -103,9 +105,9 @@ public class CurrencyManager : MonoBehaviour, IParkingRequestObserver
             // Automatically add 10 currency if the balance reaches 0
             currency = 0;
             Debug.Log("[CurrencyManager] Money is zero, adding 10 currency.");
-            Invoke("Add10", 1f); 
-            
-            
+            Invoke("Add10", 1f);
+
+
         }
 
     }
@@ -115,7 +117,7 @@ public class CurrencyManager : MonoBehaviour, IParkingRequestObserver
         print("add10");
 
     }
-    public void OnOptionButtonClicked() 
+    public void OnOptionButtonClicked()
     {
         SubtractCurrency(currentBetAmount);  // Deduct 10 currency for the bet
         StartCoroutine(ParkPrediction());  // Start the bet prediction logic
@@ -195,7 +197,7 @@ public class CurrencyManager : MonoBehaviour, IParkingRequestObserver
     {
         if (currencyText != null)
         {
-            currencyText.text = currency.ToString();
+            currencyText.text = currencyDisplayStrategy.Display(currency);
         }
     }
 
