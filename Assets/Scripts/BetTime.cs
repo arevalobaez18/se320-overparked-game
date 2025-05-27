@@ -63,45 +63,57 @@ public class BetTime : MonoBehaviour
         string minutes = Mathf.FloorToInt((float)timeLeft.TotalMinutes).ToString();
         string seconds = Mathf.FloorToInt((float)(timeLeft.Seconds)).ToString("D2");
 
-        // Display legacy style time text
+      
         timeText.text = $"Bets close in: {minutes}:{seconds} " +
                           $"\n(ends: {betEndTime:hh:mm tt})";
     }
 
-    // Call this to start a bet
     public void StartBet(int amount, string structureName)
     {
         betAmount = amount;
         betStructureName = structureName;
         rewardGiven = false;
-        // Optionally reset timer here if needed
-        // betEndTime = DateTime.Now.AddMinutes(5);
         Debug.Log($"[BetTime] Bet started: {amount} on {structureName}");
     }
 
-    // Call this to end the bet
+
     public void EndBet()
     {
-        isActive = false; // Prevent multiple calls
+        isActive = false; 
         Debug.Log($"[BetTime] Betting window closed for {betStructureName}.");
 
-        timeText.text = "Betting window closed.";
+     
+        int initialCurrency = 100;
 
-        // Play sound when time is up
+        
+        int currencyDifference = CurrencyManager.Instance.currency - initialCurrency;
+
+        
+        string resultMessage = "You lost the bet!";  
+
+        if (currencyDifference > 0)
+        {
+            
+            resultMessage = $"You won {currencyDifference} currency!";
+        }
+        else if (currencyDifference < 0)
+        {
+            
+            resultMessage = $"You lost {-currencyDifference} currency!";
+        }
+        else
+        {
+            
+            resultMessage = "You broke even. No gain, no loss!";
+        }
+
+       
+        timeText.text = $"Betting window closed.\n{resultMessage}";
+
+      
         if (timeUpSound != null && audioSource != null)
         {
             audioSource.PlayOneShot(timeUpSound);
-        }
-
-        // Reward the user only once when the timer completes
-        if (!rewardGiven && betAmount > 0)
-        {
-            rewardGiven = true;
-            if (CurrencyManager.Instance != null)
-            {
-                CurrencyManager.Instance.AddCurrency(betAmount * 2); // Double the bet as reward
-                Debug.Log($"[BetTime] Timer complete, user rewarded {betAmount * 2} for bet on {betStructureName}!");
-            }
         }
     }
 
